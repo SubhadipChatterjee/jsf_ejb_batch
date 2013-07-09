@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+  http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans.xsd
+  http://www.springframework.org/schema/batch
+  http://www.springframework.org/schema/batch/spring-batch.xsd">
+    
+    <bean class="org.springframework.batch.core.scope.StepScope" />
+
+    <bean id="itemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+        <property name="dataSource" ref="embeddedDataSource" />
+        <property name="sql" value="select ID, FIRST_NAME as fname, LAST_NAME as lname, JOINED_AT as doj, DEPARTMENT as dept from PERSON where FIRST_NAME = ?" />
+        <property name="rowMapper">
+            <bean class="org.springframework.jdbc.core.BeanPropertyRowMapper">
+                <property name="mappedClass" value="poc.springbatch.entities.Person" />
+            </bean>
+        </property>
+        <property name="preparedStatementSetter" ref="personFinderQuerySetter" />        
+    </bean>
+    
+    <bean id="personFinderQuerySetter" class="poc.springbatch.beans.PersonFinderQuerySetter" scope="step">        
+        <property name="firstName" value="#{jobParameters['firstName']}" /> 			
+    </bean>
+  
+    <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+        <property name="resource" value="#{jobParameters[outputFile]}" />
+        <property name="lineAggregator">
+            <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+                <property name="delimiter" value="," />
+                <property name="fieldExtractor">
+                    <bean class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="id,fname,lname,doj,dept" />
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+    
+    <bean id="sampleListener" class="poc.springbatch.beans.SimpleJobExecutionListener"/>
+    
+    <batch:job id="dbToFlatFileJob" restartable="true">
+        <batch:step id="allInOneStep">			
+            <batch:tasklet>
+                <batch:chunk reader="itemReader" writer="itemWriter" commit-interval="2" />
+            </batch:tasklet>
+            <batch:listeners>               
+                <batch:listener ref="sampleListener"/>   
+            </batch:listeners>
+        </batch:step>
+    </batch:job>
+    
+</beans>
