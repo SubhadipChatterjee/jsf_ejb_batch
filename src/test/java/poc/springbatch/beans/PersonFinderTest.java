@@ -41,7 +41,7 @@ public class PersonFinderTest {
         jobLauncher.run(job, jobParameters);
     }
 
-    @Test
+    //@Test
     public void testLaunchJobFromTimer() throws NamingException {        
         EJBContainer embeddedContainer = EJBContainer.createEJBContainer();
         Context context = embeddedContainer.getContext();

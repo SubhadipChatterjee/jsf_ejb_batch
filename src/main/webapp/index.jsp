@@ -8,7 +8,7 @@
         <title>Welcome Page</title>
     </head>
     <body>
-        <h2>Hello World!</h2>
-        Invoke the Servlet by clicking <a href="SimpleServlet">here</a>.
+        <h2>Hello. Welcome to the Demo</h2>
+        <p>Register a user, by clicking <a href="postOrder.jsf">here</a>.
     </body>
 </html>

@@ -18,6 +18,7 @@
     </properties>
 
     <dependencies>
+        <!--
         <dependency>
             <groupId>org.glassfish.main.extras</groupId>
             <artifactId>glassfish-embedded-static-shell</artifactId>
@@ -25,6 +26,7 @@
             <scope>system</scope>
             <systemPath>${glassfish.embedded-static-shell.jar}</systemPath>
         </dependency>
+        -->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
