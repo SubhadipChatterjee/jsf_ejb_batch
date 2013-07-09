@@ -3,22 +3,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html">
     <h:head>
-        <title>Enter Job Details</title>
+        <title>Register A Person</title>
     </h:head>
     <h:body>
-        <h1>Enter Name &amp; Age</h1>
-        <h:form>
+        <h1>Enter Details</h1>
+        <h:form >
             <h:panelGrid columns="2">
                 <h:outputText value="FIRST NAME:"/>
-                <h:inputText value="#{simpleBean.name}" title="name" id="name" required="true"/>
+                <h:inputText value="#{postOrderHandler.firstName}" title="First Name" id="fName" required="true"/>
                 <h:outputText value="LAST NAME:"/>
-                <h:inputText value="#{simpleBean.age}" title="age" id="age" required="true"/>
+                <h:inputText value="#{postOrderHandler.lastName}" title="Last Name" id="lName" required="true"/>
                 <h:outputText value="JOINED AT:"/>
-                <h:inputText value="#{simpleBean.age}" title="age" id="age" required="true"/>
+                <h:inputText value="#{postOrderHandler.dateOfJoin}" title="Date Of Joining" id="doj" required="true"/>
                 <h:outputText value="DEPARTMENT:"/>
-                <h:inputText value="#{simpleBean.age}" title="age" id="age" required="true"/>
+                <h:inputText value="#{postOrderHandler.department}" title="Department" id="dept" required="true"/>
             </h:panelGrid>
-            <h:commandButton action="show" value="submit"/>
+            <h:commandButton action="#{postOrderHandler.handlePersistance}" value="submit"/>
+            <h:commandButton value="reset" type="reset" />
         </h:form>
     </h:body>
 </html>

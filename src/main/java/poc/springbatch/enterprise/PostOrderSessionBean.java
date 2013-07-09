@@ -15,9 +15,9 @@ import poc.springbatch.entities.Person;
  * @author subhadip.chatterjee@tcs.com
  */
 @Stateless
-public class PostOrderBean {
+public class PostOrderSessionBean {
 
-    private final Logger logger = LoggerFactory.getLogger(PostOrderBean.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final ApplicationContext springContext;
     private static final DataSource dataSource;
     private static final String insertSQL;

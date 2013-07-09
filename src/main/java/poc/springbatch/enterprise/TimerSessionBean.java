@@ -35,7 +35,7 @@ import poc.springbatch.types.PersonRowMapper;
 @Singleton
 public class TimerSessionBean {
 
-    private final Logger logger = LoggerFactory.getLogger(TimerSessionBean.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final ApplicationContext springContext;
     private static final DataSource dataSource;
     private static final String selectSQL;
@@ -57,7 +57,7 @@ public class TimerSessionBean {
         }
     }
 
-    @Schedule(second = "*/30", minute = "*/30", hour = "*/4")
+    @Schedule(second = "*/30", minute = "*/30", hour = "*")
     public void automaticTimeout() {
         this.lastAutomaticTimeout = new Date();
         if (logger.isInfoEnabled()) {
@@ -69,6 +69,10 @@ public class TimerSessionBean {
         JobLauncher jobLauncher = springContext.getBean(JobLauncher.class);
         Job job = springContext.getBean(Job.class);
 
+        if(logger.isInfoEnabled()){
+            logger.info("Current batch size = "+match.size());
+        }
+        
         while (finder.hasNext()) {
             JobParameters jobParameters = new JobParametersBuilder()
                     .addString("firstName", finder.next().getFname())

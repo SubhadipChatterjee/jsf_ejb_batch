@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
  * @author subhadip.chatterjee@tcs.com
  */
 @Stateless
-public class SimpleEJB {
+public class SimpleSessionBean {
 
     public String sayHello(String name) {
         return "Hello " + name + "!!!";

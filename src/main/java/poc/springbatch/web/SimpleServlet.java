@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import poc.springbatch.enterprise.SimpleEJB;
+import poc.springbatch.enterprise.SimpleSessionBean;
 
 /**
  *
@@ -22,7 +22,7 @@ import poc.springbatch.enterprise.SimpleEJB;
 public class SimpleServlet extends HttpServlet {
 
     @EJB
-    SimpleEJB bean;
+    SimpleSessionBean bean;
 
     /**
      * Processes requests for both HTTP
