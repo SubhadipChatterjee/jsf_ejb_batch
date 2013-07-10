@@ -29,8 +29,8 @@ public class PostOrderSessionBean {
     }
 
     /**
-     * 
-     * @param person 
+     *
+     * @param person
      */
     public void save(Person person) {
         if (logger.isInfoEnabled()) {
@@ -48,7 +48,7 @@ public class PostOrderSessionBean {
                 }
             }
         } catch (Exception ex) {
-            logger.error("RECORD failed"+ex.getMessage());
+            logger.error("RECORD failed" + ex.getMessage());
         }
     }
 }
