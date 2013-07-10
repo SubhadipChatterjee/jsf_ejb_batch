@@ -1,2 +1,4 @@
 /nb-configuration.xml
 /target/
+/nbactions.xml
+/src/main/webapp/WEB-INF/glassfish-web.xml
