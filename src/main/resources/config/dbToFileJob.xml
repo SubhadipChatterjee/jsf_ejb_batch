@@ -9,10 +9,19 @@
   http://www.springframework.org/schema/batch/spring-batch.xsd">
     
     <bean class="org.springframework.batch.core.scope.StepScope" />
+    
+    <bean id="personFinderQuerySetter" 
+          class="poc.springbatch.beans.PersonFinderQuerySetter" 
+          scope="step">        
+        <property name="firstName" value="#{jobParameters['firstName']}" /> 			
+    </bean>
 
-    <bean id="itemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader" scope="step">
+    <bean id="sqlItemReader" 
+          class="org.springframework.batch.item.database.JdbcCursorItemReader" 
+          scope="step">
         <property name="dataSource" ref="embeddedDataSource" />
-        <property name="sql" value="select ID, FIRST_NAME as fname, LAST_NAME as lname, JOINED_AT as doj, DEPARTMENT as dept from PERSON where FIRST_NAME = ?" />
+        <property name="sql" 
+                  value="select ID, FIRST_NAME as fname, LAST_NAME as lname, JOINED_AT as doj, DEPARTMENT as dept from PERSON where FIRST_NAME = ?" />
         <property name="rowMapper">
             <bean class="org.springframework.jdbc.core.BeanPropertyRowMapper">
                 <property name="mappedClass" value="poc.springbatch.entities.Person" />
@@ -20,12 +29,10 @@
         </property>
         <property name="preparedStatementSetter" ref="personFinderQuerySetter" />        
     </bean>
-    
-    <bean id="personFinderQuerySetter" class="poc.springbatch.beans.PersonFinderQuerySetter" scope="step">        
-        <property name="firstName" value="#{jobParameters['firstName']}" /> 			
-    </bean>
-  
-    <bean id="itemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter" scope="step">
+              
+    <bean id="fileItemWriter" 
+          class="org.springframework.batch.item.file.FlatFileItemWriter" 
+          scope="step">
         <property name="resource" value="#{jobParameters[outputFile]}" />
         <property name="lineAggregator">
             <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
@@ -39,12 +46,37 @@
         </property>
     </bean>
     
+    <bean id="sqlItemWriter" 
+          class="org.springframework.batch.item.database.JdbcBatchItemWriter" 
+          scope="step">
+        <property name="dataSource" ref="embeddedDataSource" />
+        <beans:property name="itemPreparedStatementSetter">
+            <beans:bean class="poc.springbatch.beans.PersonUpdateQuerySetter" />
+        </beans:property>
+        <beans:property name="sql" value="update PERSON set JUST_IN = null where ID = ?" />
+    </bean>
+    
+    <bean id="compositeWriter" 
+          class="org.springframework.batch.item.support.CompositeItemWriter" 
+          scope="step">
+        <beans:property name="delegates">
+            <beans:list>
+                <beans:ref bean="sqlItemWriter" />
+                <beans:ref bean="fileItemWriter" />
+            </beans:list>
+        </beans:property>
+    </bean>
+            
     <bean id="sampleListener" class="poc.springbatch.beans.SimpleJobExecutionListener"/>
     
     <batch:job id="dbToFlatFileJob" restartable="true">
         <batch:step id="allInOneStep">			
             <batch:tasklet>
-                <batch:chunk reader="itemReader" writer="itemWriter" commit-interval="2" />
+                <batch:chunk reader="sqlItemReader" writer="compositeWriter" commit-interval="2" >
+                    <batch:streams>
+                        <batch:stream ref="fileItemWriter"/>
+                    </batch:streams>
+                </batch:chunk>
             </batch:tasklet>
             <batch:listeners>               
                 <batch:listener ref="sampleListener"/>   
