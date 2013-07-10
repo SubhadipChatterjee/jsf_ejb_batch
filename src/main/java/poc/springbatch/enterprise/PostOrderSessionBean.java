@@ -25,30 +25,26 @@ public class PostOrderSessionBean {
     static {
         springContext = new ClassPathXmlApplicationContext(new String[]{"classpath:/config/baseSetup.xml", "classpath:/config/dbToFileJob.xml"});
         dataSource = springContext.getBean("embeddedDataSource", DataSource.class);
-        insertSQL = "insert into PERSON (ID, FIRST_NAME, LAST_NAME, JOINED_AT, DEPARTMENT, JUST_IN) values (null, ?, ?, ?, ?, 1)";
+        insertSQL = "insert into PERSON (ID, FIRST_NAME, LAST_NAME, JOINED_AT, DEPARTMENT, JUST_IN) values (?, ?, ?, ?, ?, 1)";
     }
 
     /**
      *
      * @param person
      */
-    public void save(Person person) {
+    public void save(Person person){
         if (logger.isInfoEnabled()) {
             logger.info("save() is beginning...");
         }
-        try {
-            JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-            PersonAddQuerySetter querySetter = new PersonAddQuerySetter();
-            querySetter.setPerson(person);
-            int savedRows = jdbcTemplate.update(insertSQL, querySetter);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        PersonAddQuerySetter querySetter = new PersonAddQuerySetter();
+        querySetter.setPerson(person);
+        int savedRows = jdbcTemplate.update(insertSQL, querySetter);
 
-            if (savedRows > 0) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("RECORD is saved");
-                }
+        if (savedRows > 0) {
+            if (logger.isInfoEnabled()) {
+                logger.info("RECORD is saved");
             }
-        } catch (Exception ex) {
-            logger.error("RECORD failed" + ex.getMessage());
         }
     }
 }

@@ -22,6 +22,7 @@
     <jdbc:embedded-database id="embeddedDataSource"> <!-- type="HSQL":default @Spring 3.x -->
         <jdbc:script location="classpath:embed/mft_schema.sql"/>
         <jdbc:script location="classpath:embed/mft_data.sql"/>
+        <jdbc:script location="classpath:/org/springframework/batch/core/schema-drop-hsqldb.sql" />
         <jdbc:script location="classpath:/org/springframework/batch/core/schema-hsqldb.sql" />
     </jdbc:embedded-database>
  

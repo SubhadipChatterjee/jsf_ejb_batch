@@ -6,7 +6,6 @@ package poc.springbatch.types;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import org.springframework.jdbc.core.RowMapper;
 import poc.springbatch.entities.Person;
 
@@ -14,17 +13,16 @@ import poc.springbatch.entities.Person;
  *
  * @author subhadip.chatterjee@tcs.com
  */
-public class PersonRowMapper implements RowMapper<Person>{
+public class PersonRowMapper implements RowMapper<Person> {
 
     @Override
     public Person mapRow(ResultSet rs, int i) throws SQLException {
         Person person = new Person();
-        person.setId(rs.getObject("ID", String.class));
-        person.setFname(rs.getObject("FIRST_NAME", String.class));
-        person.setLname(rs.getObject("LAST_NAME", String.class));
-        person.setDoj(rs.getObject("JOINED_AT", Date.class));
-        person.setDept(rs.getObject("DEPARTMENT", String.class));
+        person.setId(rs.getString("ID"));
+        person.setFname(rs.getString("FIRST_NAME"));
+        person.setLname(rs.getString("LAST_NAME"));
+        person.setDoj(rs.getDate("JOINED_AT"));
+        person.setDept(rs.getString("DEPARTMENT"));
         return person;
     }
-    
 }

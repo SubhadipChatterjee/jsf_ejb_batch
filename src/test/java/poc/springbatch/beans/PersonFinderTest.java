@@ -23,8 +23,8 @@ import static org.junit.Assert.*;
  *
  * @author subhadip.chatterjee@tcs.com
  */
-@ContextConfiguration(locations = {"classpath:/config/baseSetup.xml", "classpath:/config/dbToFileJob.xml"})
-@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = {"classpath:/config/baseSetup.xml", "classpath:/config/dbToFileJob.xml"})
+//@RunWith(SpringJUnit4ClassRunner.class)
 public class PersonFinderTest {
 
     @Autowired
@@ -32,7 +32,7 @@ public class PersonFinderTest {
     @Autowired
     Job job;
 
-    @Test
+    //@Test
     public void testLaunchJobWithPersonName() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addString("firstName", "ALOK")

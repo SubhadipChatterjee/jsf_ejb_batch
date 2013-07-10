@@ -3,6 +3,7 @@ package poc.springbatch.enterprise;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+import javax.annotation.PostConstruct;
 
 import javax.annotation.Resource;
 
@@ -24,6 +25,7 @@ import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteExcep
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import poc.springbatch.entities.Person;
 import poc.springbatch.types.PersonRowMapper;
@@ -49,6 +51,13 @@ public class TimerSessionBean {
         selectSQL = "select * from PERSON where JUST_IN = 1";
     }
 
+    @PostConstruct
+    public void onStartup() {
+        if (logger.isInfoEnabled()) {
+            logger.info("TimerSessionBean is initialized");
+        }
+    }
+
     public String getLastAutomaticTimeout() {
         if (lastAutomaticTimeout != null) {
             return lastAutomaticTimeout.toString();
@@ -57,35 +66,37 @@ public class TimerSessionBean {
         }
     }
 
-    @Schedule(second = "*/30", minute = "*/30", hour = "*")
+    @Schedule(second = "*/30", minute = "*", hour = "19-20", persistent = false)
     public void automaticTimeout() {
         this.lastAutomaticTimeout = new Date();
         if (logger.isInfoEnabled()) {
             logger.info("Autmatic timeout occured ->{0}", getLastAutomaticTimeout());
         }
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        List<Person> match = (List<Person>) jdbcTemplate.queryForObject(selectSQL, new PersonRowMapper());
-        ListIterator<Person> finder = match.listIterator();
-        JobLauncher jobLauncher = springContext.getBean(JobLauncher.class);
-        Job job = springContext.getBean(Job.class);
+        try {
+            List<Person> match = (List<Person>) jdbcTemplate.query(selectSQL, new PersonRowMapper());
+            ListIterator<Person> finder = match.listIterator();
 
-        if(logger.isInfoEnabled()){
-            logger.info("Current batch size = "+match.size());
-        }
-        
-        while (finder.hasNext()) {
-            JobParameters jobParameters = new JobParametersBuilder()
-                    .addString("firstName", finder.next().getFname())
-                    .addString("outputFile", "file:C:\\Batcave\\ProjectLogs\\personFound.txt")
-                    .toJobParameters();
-            try {
-                jobLauncher.run(job, jobParameters);
-            } catch (JobExecutionAlreadyRunningException 
-                    | JobRestartException 
-                    | JobInstanceAlreadyCompleteException 
-                    | JobParametersInvalidException ex) {
-                logger.error(ex.getMessage());
+            if (logger.isInfoEnabled()) {
+                logger.info("Current batch size = " + match.size());
             }
+            
+            // The Spring JobParameter code is still not optimized to accept multiple order id 
+            JobLauncher jobLauncher = springContext.getBean(JobLauncher.class);
+            Job job = springContext.getBean(Job.class);            
+            while (finder.hasNext()) {
+                JobParameters jobParameters = new JobParametersBuilder()
+                        .addString("firstName", finder.next().getFname())
+                        .addString("outputFile", "file:C:\\Batcave\\ProjectLogs\\personFound.txt")
+                        .toJobParameters();
+                try {
+                    jobLauncher.run(job, jobParameters);
+                } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException ex) {
+                    logger.error(ex.getMessage());
+                }
+            }
+        } catch (EmptyResultDataAccessException ex) {
+            logger.warn("No matching records found :" + ex.getMessage());
         }
     }
 }

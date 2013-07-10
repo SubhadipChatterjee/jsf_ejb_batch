@@ -9,6 +9,8 @@
         <h1>Enter Details</h1>
         <h:form >
             <h:panelGrid columns="2">
+                <h:outputText value="USER ID:"/>
+                <h:inputText value="#{postOrderHandler.uid}" title="User Id" id="uid" required="true"/>                
                 <h:outputText value="FIRST NAME:"/>
                 <h:inputText value="#{postOrderHandler.firstName}" title="First Name" id="fName" required="true"/>
                 <h:outputText value="LAST NAME:"/>
@@ -16,7 +18,7 @@
                 <h:outputText value="JOINED AT:"/>
                 <h:inputText value="#{postOrderHandler.dateOfJoin}" title="Date Of Joining" id="doj" required="true"/>
                 <h:outputText value="DEPARTMENT:"/>
-                <h:inputText value="#{postOrderHandler.department}" title="Department" id="dept" required="true"/>
+                <h:inputText value="#{postOrderHandler.department}" title="Department" id="dept" required="false"/>
             </h:panelGrid>
             <h:commandButton action="#{postOrderHandler.handlePersistance}" value="submit"/>
             <h:commandButton value="reset" type="reset" />
