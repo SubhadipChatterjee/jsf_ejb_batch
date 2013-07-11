@@ -50,21 +50,21 @@
           class="org.springframework.batch.item.database.JdbcBatchItemWriter" 
           scope="step">
         <property name="dataSource" ref="embeddedDataSource" />
-        <beans:property name="itemPreparedStatementSetter">
-            <beans:bean class="poc.springbatch.beans.PersonUpdateQuerySetter" />
-        </beans:property>
-        <beans:property name="sql" value="update PERSON set JUST_IN = null where ID = ?" />
+        <property name="itemPreparedStatementSetter">
+            <bean class="poc.springbatch.beans.PersonUpdateQuerySetter" />
+        </property>
+        <property name="sql" value="update PERSON set JUST_IN = null where ID = ?" />
     </bean>
     
     <bean id="compositeWriter" 
           class="org.springframework.batch.item.support.CompositeItemWriter" 
           scope="step">
-        <beans:property name="delegates">
-            <beans:list>
-                <beans:ref bean="sqlItemWriter" />
-                <beans:ref bean="fileItemWriter" />
-            </beans:list>
-        </beans:property>
+        <property name="delegates">
+            <list>
+                <ref bean="sqlItemWriter" />
+                <ref bean="fileItemWriter" />
+            </list>
+        </property>
     </bean>
             
     <bean id="sampleListener" class="poc.springbatch.beans.SimpleJobExecutionListener"/>
