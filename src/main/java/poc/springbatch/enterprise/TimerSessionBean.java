@@ -33,7 +33,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import poc.springbatch.entities.Person;
 import poc.springbatch.event.messages.TimeSnap;
 import poc.springbatch.events.TimerEvent;
-import poc.springbatch.types.OrderStatus;
+import poc.springbatch.types.BatchProcessStatus;
 import poc.springbatch.types.PersonRowMapper;
 
 /**
@@ -115,7 +115,7 @@ public class TimerSessionBean {
                     }
 
                     TimeSnap moment = new TimeSnap();
-                    moment.setOrderStatus(OrderStatus.COMPLETED);
+                    moment.setOrderStatus(BatchProcessStatus.COMPLETED);
                     timeEvent.fire(moment); // Status broadcasted
 
                 } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException ex) {

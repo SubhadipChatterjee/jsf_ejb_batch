@@ -18,7 +18,8 @@ import poc.springbatch.enterprise.PostOrderSessionBean;
 import poc.springbatch.entities.Person;
 import poc.springbatch.event.messages.TimeSnap;
 import poc.springbatch.events.TimerEvent;
-import poc.springbatch.types.RegistrationStatus;
+import poc.springbatch.types.BatchProcessStatus;
+import poc.springbatch.types.UserRegistrationStatus;
 
 /**
  *
@@ -37,7 +38,8 @@ public class PostOrderHandler {
     private String lastName;
     private Date dateOfJoin; // expected format: YYYY-MM-DD
     private String department;
-    private RegistrationStatus status = RegistrationStatus.FAILURE;
+    private UserRegistrationStatus regnStatus = UserRegistrationStatus.UNKNOWN;
+    private BatchProcessStatus batchStatus = BatchProcessStatus.UNKNOWN;
 
     static {
         dateFormatter.setLenient(false);
@@ -109,8 +111,12 @@ public class PostOrderHandler {
         this.department = department;
     }
 
-    public String getStatus() {
-        return status.toString();
+    public String getRegnStatus() {
+        return regnStatus.toString();
+    }
+    
+    public String getBatchStatus() {
+        return batchStatus.toString();
     }
         
     public void handlePersistance() throws IOException {
@@ -125,16 +131,16 @@ public class PostOrderHandler {
         person.setDoj(dateOfJoin);
         person.setDept(department);
 
-        status = ejbInstance.save(person);
+        regnStatus = ejbInstance.save(person);
         if (logger.isInfoEnabled()) {
             logger.info("Form data is saved");
         }                
     }
-    
-    public String eventFired(@Observes @TimerEvent TimeSnap time){
+        
+    public void eventFired(@Observes @TimerEvent TimeSnap time){
         if (logger.isInfoEnabled()) {
             logger.info("Timer event received...");
         } 
-        return time.getOrderStatus().toString();
+        batchStatus = time.getOrderStatus();
     }
 }

@@ -5,7 +5,7 @@
 package poc.springbatch.event.messages;
 
 import java.util.Date;
-import poc.springbatch.types.OrderStatus;
+import poc.springbatch.types.BatchProcessStatus;
 
 /**
  *
@@ -14,7 +14,7 @@ import poc.springbatch.types.OrderStatus;
 public class TimeSnap {
 
     private Date timestamp;
-    private OrderStatus orderStatus;
+    private BatchProcessStatus orderStatus;
 
     public TimeSnap() {
         timestamp = new Date();
@@ -24,11 +24,11 @@ public class TimeSnap {
         return this.timestamp;
     }
 
-    public OrderStatus getOrderStatus() {
+    public BatchProcessStatus getOrderStatus() {
         return orderStatus;
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
+    public void setOrderStatus(BatchProcessStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 }

@@ -8,7 +8,10 @@ package poc.springbatch.types;
  *
  * @author subhadip.chatterjee@tcs.com
  */
-public enum RegistrationStatus {
-
-    SUCCESS, FAILURE;
+public enum BatchProcessStatus {
+    SUBMITTED,
+    PROCESSING,
+    PAUSED,
+    COMPLETED,
+    UNKNOWN;
 }
