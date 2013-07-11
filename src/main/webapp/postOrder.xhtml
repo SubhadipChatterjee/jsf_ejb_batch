@@ -22,6 +22,16 @@
             </h:panelGrid>
             <h:commandButton action="#{postOrderHandler.handlePersistance}" value="submit"/>
             <h:commandButton value="reset" type="reset" />
+
+            <h:panelGrid columns="2">
+                <h:outputText value="The Status of Registration:"/>
+                <h:outputText value="#{postOrderHandler.status}"/>
+                
+                <h:outputText value="The Status of Batch Job (Timer Event Notifier):"/>
+                <h:outputText value="#{postOrderHandler.eventFired}"/>
+            </h:panelGrid>
+            
+            
         </h:form>
     </h:body>
 </html>

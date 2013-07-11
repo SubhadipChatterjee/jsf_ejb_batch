@@ -9,6 +9,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import poc.springbatch.beans.PersonAddQuerySetter;
 import poc.springbatch.entities.Person;
+import poc.springbatch.types.RegistrationStatus;
 
 /**
  *
@@ -32,7 +33,8 @@ public class PostOrderSessionBean {
      *
      * @param person
      */
-    public void save(Person person){
+    public RegistrationStatus save(Person person) {
+        RegistrationStatus status = RegistrationStatus.FAILURE;
         if (logger.isInfoEnabled()) {
             logger.info("save() is beginning...");
         }
@@ -45,6 +47,8 @@ public class PostOrderSessionBean {
             if (logger.isInfoEnabled()) {
                 logger.info("RECORD is saved");
             }
+            status = RegistrationStatus.SUCCESS;
         }
+        return status;
     }
 }

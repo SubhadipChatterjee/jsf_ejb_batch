@@ -6,8 +6,6 @@ package poc.springbatch.beans;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Date;
-import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
