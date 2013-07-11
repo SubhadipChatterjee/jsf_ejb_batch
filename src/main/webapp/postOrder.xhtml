@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html">
-    <h:head>
+      <h:head>
         <title>Register A Person</title>
     </h:head>
     <h:body>
@@ -25,13 +25,13 @@
 
             <h:panelGrid columns="2">
                 <h:outputText value="The Status of Registration:"/>
-                <h:outputText value="#{postOrderHandler.status}"/>
-                
-                <h:outputText value="The Status of Batch Job (Timer Event Notifier):"/>
-                <h:outputText value="#{postOrderHandler.eventFired}"/>
+                <h:outputText value="#{postOrderHandler.regnStatus}"/>
+
+                <h:outputText value="The Status of Batch Job:"/>
+
             </h:panelGrid>
-            
-            
+
+
         </h:form>
     </h:body>
 </html>

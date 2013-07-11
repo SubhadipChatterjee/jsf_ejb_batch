@@ -8,34 +8,22 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.batch.item.database.ItemPreparedStatementSetter;
 import poc.springbatch.entities.Person;
 
 /**
  *
  * @author subhadip.chatterjee@tcs.com
  */
-public class PersonUpdateQuerySetter implements PreparedStatementSetter {
-    
+public class PersonUpdateQuerySetter implements ItemPreparedStatementSetter<Person> {
+
     private final static Logger logger = LoggerFactory.getLogger(PersonUpdateQuerySetter.class);
-    private Person person;
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
 
     @Override
-    public void setValues(PreparedStatement ps) throws SQLException {
+    public void setValues(Person item, PreparedStatement ps) throws SQLException {
         if (logger.isInfoEnabled()) {
             logger.info("PreparedStatementSetter.setValues() begins...");
-        }
-        if (person == null) {
-            throw new RuntimeException();
-        }
-        ps.setString(1, person.getId());        
+        }        
+        ps.setString(1, item.getId());
     }
 }
