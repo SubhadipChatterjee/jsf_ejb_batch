@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
-      <h:head>
+<!DOCTYPE html>
+<html xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
         <title>Register A Person</title>
+        <h:outputStylesheet name="css/wsocket.css" />
     </h:head>
     <h:body>
         <h1>Enter Details</h1>
@@ -26,12 +26,12 @@
             <h:panelGrid columns="2">
                 <h:outputText value="The Status of Registration:"/>
                 <h:outputText value="#{postOrderHandler.regnStatus}"/>
-
-                <h:outputText value="The Status of Batch Job:"/>
-
             </h:panelGrid>
-
+            <h:outputText value="The Status of Batch Job:"/>
+            <br/>
+            <div id="sockMsg"></div>
 
         </h:form>
+        <h:outputScript name="js/wsocket.js" />
     </h:body>
 </html>

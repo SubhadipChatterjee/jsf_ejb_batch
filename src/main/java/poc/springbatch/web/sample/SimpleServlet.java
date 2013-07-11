@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package poc.springbatch.web;
+package poc.springbatch.web.sample;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import poc.springbatch.enterprise.SimpleSessionBean;
+import poc.springbatch.enterprise.sample.SimpleSessionBean;
 
 /**
  *

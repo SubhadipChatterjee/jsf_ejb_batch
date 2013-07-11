@@ -83,47 +83,56 @@ public class TimerSessionBean {
         if (logger.isInfoEnabled()) {
             logger.info("Autmatic timeout occured ->{}", getLastAutomaticTimeout());
         }
-        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        try {
-            List<Person> match = (List<Person>) jdbcTemplate.query(selectSQL, new PersonRowMapper());
-            ListIterator<Person> finder = match.listIterator();
 
+        try {
+            List<Person> match = fetchJustInRecords();
             if (logger.isInfoEnabled()) {
                 logger.info("Current batch size = {}", match.size());
             }
+            
+            spawnTheJob(match);
 
-            // The Spring JobParameter code is still not optimized to accept multiple order id 
-            JobLauncher jobLauncher = springContext.getBean(JobLauncher.class);
-            Job job = springContext.getBean(Job.class);
-            while (finder.hasNext()) {
-                JobParameters jobParameters = new JobParametersBuilder()
-                        .addString("firstName", finder.next().getFname())
-                        .addString("outputFile", "file:C:\\Batcave\\ProjectLogs\\personFound.txt")
-                        .toJobParameters();
-                try {
-                    jobLauncher.run(job, jobParameters);
-                    // @TODO Check the job status using Spring-Batch-ADMIN
-
-                    // TEMPORARY Arrangement - sleeping for 1000 millsec
-                    try {
-                        Thread.sleep(1000);
-                        if (logger.isInfoEnabled()) {
-                            logger.info("Processing Thread now sleeps for = {} millsec", 1000);
-                        }
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
-
-                    TimeSnap moment = new TimeSnap();
-                    moment.setOrderStatus(BatchProcessStatus.COMPLETED);
-                    timeEvent.fire(moment); // Status broadcasted
-
-                } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException ex) {
-                    logger.error(ex.getMessage());
-                }
-            }
         } catch (EmptyResultDataAccessException ex) {
             logger.warn("No matching records found : {}", ex.getMessage());
+        }
+    }
+
+    private List<Person> fetchJustInRecords() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return (List<Person>) jdbcTemplate.query(selectSQL, new PersonRowMapper());
+    }
+
+    private void spawnTheJob(List<Person> match) {
+        ListIterator<Person> finder = match.listIterator();
+
+        JobLauncher jobLauncher = springContext.getBean(JobLauncher.class);
+        Job job = springContext.getBean(Job.class);
+        while (finder.hasNext()) {
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addString("firstName", finder.next().getFname())
+                    .addString("outputFile", "file:C:\\Batcave\\ProjectLogs\\personFound.txt")
+                    .toJobParameters();
+            try {
+                jobLauncher.run(job, jobParameters);
+                // @TODO Check the job status using Spring-Batch-ADMIN
+
+                // TEMPORARY Arrangement - sleeping for 1000 millsec
+                try {
+                    Thread.sleep(1000);
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Processing Thread now sleeps for = {} millsec", 1000);
+                    }
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                TimeSnap moment = new TimeSnap();
+                moment.setOrderStatus(BatchProcessStatus.COMPLETED);
+                timeEvent.fire(moment); // Status broadcasted
+
+            } catch (JobExecutionAlreadyRunningException | JobRestartException | JobInstanceAlreadyCompleteException | JobParametersInvalidException ex) {
+                logger.error(ex.getMessage());
+            }
         }
     }
 }

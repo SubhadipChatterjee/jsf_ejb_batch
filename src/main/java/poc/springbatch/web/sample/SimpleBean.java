@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package poc.springbatch.web;
+package poc.springbatch.web.sample;
 
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;

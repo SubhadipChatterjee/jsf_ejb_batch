@@ -135,12 +135,5 @@ public class PostOrderHandler {
         if (logger.isInfoEnabled()) {
             logger.info("Form data is saved");
         }                
-    }
-        
-    public void eventFired(@Observes @TimerEvent TimeSnap time){
-        if (logger.isInfoEnabled()) {
-            logger.info("Timer event received...");
-        } 
-        batchStatus = time.getOrderStatus();
-    }
+    }            
 }

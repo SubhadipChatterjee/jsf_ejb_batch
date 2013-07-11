@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package poc.springbatch.beans;
+package poc.springbatch.listeners;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

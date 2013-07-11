@@ -34,6 +34,7 @@
           class="org.springframework.batch.item.file.FlatFileItemWriter" 
           scope="step">
         <property name="resource" value="#{jobParameters[outputFile]}" />
+        <property name="appendAllowed" value="true" />
         <property name="lineAggregator">
             <bean class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
                 <property name="delimiter" value="," />
@@ -67,7 +68,7 @@
         </property>
     </bean>
             
-    <bean id="sampleListener" class="poc.springbatch.beans.SimpleJobExecutionListener"/>
+    <bean id="sampleListener" class="poc.springbatch.listeners.SimpleJobExecutionListener"/>
     
     <batch:job id="dbToFlatFileJob" restartable="true">
         <batch:step id="allInOneStep">			

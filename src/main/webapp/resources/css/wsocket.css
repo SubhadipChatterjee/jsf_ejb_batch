@@ -1,0 +1,17 @@
+/* 
+    Document   : wsocket
+    Created on : Jul 11, 2013, 9:21:09 PM
+    Author     : subhadip.chatterjee@tcs.com
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+* { 
+    font-family: verdana;
+    font-size: small;
+}
+
+label#data {
+    color: darkturquoise;
+}
+

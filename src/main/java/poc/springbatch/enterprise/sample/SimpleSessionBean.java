@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package poc.springbatch.enterprise;
+package poc.springbatch.enterprise.sample;
 
 import javax.ejb.Stateless;
 
