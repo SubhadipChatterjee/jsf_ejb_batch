@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.enterprise.event.Observes;
+import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -23,7 +24,7 @@ import poc.springbatch.events.TimerEvent;
  * @author subhadip.chatterjee@tcs.com
  */
 @ServerEndpoint("/job-status")
-public class JobStatusNotifier {
+public class JobStatusNotifierWSocket {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final Set<Session> peers =
@@ -56,12 +57,24 @@ public class JobStatusNotifier {
                 if (each.isOpen()) {
                     each.getBasicRemote().sendText("[Job Status]" + time.getOrderStatus().toString());
                 }
-                else{
-                    peers.remove(each);
-                }
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
+        }
+    }
+    
+    @OnClose
+    public void onClose(final Session peer){
+        try {
+            peer.getBasicRemote().sendText("[Socket] Session closed");
+            if (logger.isInfoEnabled()) {
+                logger.info("Client Session closed. ID: " + peer.getId());
+            }
+            peers.remove(peer);
+            peer.close();
+        }
+        catch (IOException ex) {
+            logger.error(ex.getMessage());
         }
     }
 }

@@ -2,15 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-var websocketSession = sessionStorage.cachedSession;
+var websocketSession;
 
 function open() {
     console.log("Socket is about to open");
     if (!websocketSession) {
-        websocketSession = new WebSocket('ws://172.20.52.105:8080/ssb/job-status');
+        websocketSession = new WebSocket('ws://localhost:8080/ssb/job-status');
         websocketSession.onmessage = actOnMessage;
-        console.log("Socket is open");
-        sessionStorage.cachedSession = websocketSession;
+        console.log("Socket is open");        
     }
 }
 
@@ -20,14 +19,12 @@ function actOnMessage(event) {
     socketMsg.innerHTML = socketMsg.innerHTML + "<br/><label id='data'>" + event.data + "</label>";
 }
 
-function close() { // This method isn't invoked, for the sake of long-polling
+function close() {
     console.log("Socket is about to close");
     if (websocketSession) {
-        websocketSession.close();
-        sessionStorage.cachedSession = null;
+        websocketSession.close();        
     }
 }
 
 window.onload = open;
 window.onunload = close;
-
